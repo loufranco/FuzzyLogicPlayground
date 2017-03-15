@@ -40,6 +40,10 @@ public struct GameState {
         return sqrt(pow(pos.x - enemyPos.x, 2) + pow(pos.y - enemyPos.y, 2))
     }
 
+    public func maximumDistance() -> CGFloat {
+        return sqrt(pow(gameCellSize.width, 2) + pow(gameCellSize.height, 2))
+    }
+
     public func isFacingWall() -> Bool {
         let cell: (Int, Int) = myDir.forwardCell(from: (Int(myPos.x), Int(myPos.y)))
         return !isInBounds(pos: CGPoint(x: cell.0, y: cell.1))

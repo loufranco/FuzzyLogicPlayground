@@ -31,13 +31,11 @@ public let posUncertaintyRule = fuzzyRule { (rs: GKRuleSystem, state: GameState)
 
 
 // A fuzzy nearness -- 1.0 is very close and 0.0 is very far
-// This is combined with the certainty value that uses the last successful radar
 public let isNearRule = fuzzyRule { (rs: GKRuleSystem, state: GameState) in
     let diff = state.enemyDistance()
-    let maxDiff = sqrt(pow(state.gameCellSize.width, 2) + pow(state.gameCellSize.height, 2))
+    let maxDiff = state.maximumDistance()
     let isNearValue = Float(1.0 - diff / maxDiff)
-    let posCertainty = rs.grade(forFact: RobotFact.posCertainty.rawValue)
-    rs.assertFact(RobotFact.isNear.rawValue, grade: min(isNearValue, posCertainty))
+    rs.assertFact(RobotFact.isNear.rawValue, grade: isNearValue)
 }
 
 // 1.0 is full laser charge and 0.0 is a depleted laser
