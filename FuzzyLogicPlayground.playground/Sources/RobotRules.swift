@@ -16,19 +16,18 @@ public func fuzzyRule(action: @escaping (GKRuleSystem, GameState) -> ()) -> GKRu
     })
 }
 
-// We more certain of the enemy position the more recent the last radar hit was
-public let posCertaintyRule = fuzzyRule { (rs: GKRuleSystem, state: GameState) in
-    let posCertainty: Float = max(0, 1.0 - (0.05 * Float(state.ticksSinceEnemyKnown)))
-    rs.assertFact(RobotFact.posCertainty.rawValue, grade: posCertainty)
-}
-
-// Apply the Fuzzy Not operator (1.0 - x) to certainty
+// We are less certain of the enemy position the less recent the last radar hit was
 public let posUncertaintyRule = fuzzyRule { (rs: GKRuleSystem, state: GameState) in
-    let posCertainty = rs.grade(forFact: RobotFact.posCertainty.rawValue)
-    let posUncertainty = 1.0 - posCertainty
+    let posUncertainty: Float = min(1.0, 0.05 * Float(state.ticksSinceEnemyKnown))
     rs.assertFact(RobotFact.posUncertainty.rawValue, grade: posUncertainty)
 }
 
+// Apply the Fuzzy Not operator (1.0 - x) to uncertainty
+public let posCertaintyRule = fuzzyRule { (rs: GKRuleSystem, state: GameState) in
+    let posUncertainty = rs.grade(forFact: RobotFact.posUncertainty.rawValue)
+    let posCertainty = 1.0 - posUncertainty
+    rs.assertFact(RobotFact.posCertainty.rawValue, grade: posCertainty)
+}
 
 // A fuzzy nearness -- 1.0 is very close and 0.0 is very far
 public let isNearRule = fuzzyRule { (rs: GKRuleSystem, state: GameState) in

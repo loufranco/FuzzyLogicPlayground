@@ -76,8 +76,9 @@ func nextAction(state: [String: Any]) -> RobotAction {
     let ruleSystem = GKRuleSystem()
     ruleSystem.state.addEntries(from: state)
     ruleSystem.add([
-        posCertaintyRule,
         posUncertaintyRule,
+        posCertaintyRule,
+
         isNearRule,
         hasLaserRule,
         hasRadarRule,
