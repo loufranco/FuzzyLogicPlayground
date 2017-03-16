@@ -53,6 +53,7 @@ let shouldFireRule = fuzzyRule { (rs: GKRuleSystem, state: GameState) in
     if !state.isFacingWall() {
         let shouldLaser = rs.minimumGrade(forFacts: [
             RobotFact.hasLaser.rawValue,
+            RobotFact.posCertainty.rawValue,
             RobotFact.isNear.rawValue]
         )
         rs.assertFact(RobotAction.fireLaser.rawValue, grade: shouldLaser)
